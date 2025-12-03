@@ -41,7 +41,7 @@ monstres_data = [
 
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # necessaire pour test
     # supprime ce qu'il se trouve
     characters.delete_many({})
     monsters.delete_many({})

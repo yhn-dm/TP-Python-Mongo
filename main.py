@@ -37,7 +37,7 @@ def main():
             start_game(nom)
 
         if choix == "2":
-            print("classement pas encore disponible mskn.")
+            print("le classement pas encore disponible.")
             separateur()
 
         if choix == "3":
@@ -45,5 +45,5 @@ def main():
 
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # necessaire pour test
     main()
