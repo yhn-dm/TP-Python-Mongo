@@ -16,11 +16,6 @@
 # input_nombre(message, min_val, max_val)
 # vérifie que le monbre est dans la bonne plage
 
-# afficher_monstre()
-# affiche les stats du monstre tiré de la bdd
-
-
-
 # get_random_monster(mongo)
 # retourne un monstre aléatoire depuis la bdd
 
@@ -28,6 +23,9 @@
 # affiche les 3 meilleurs scores tiré de la bdd
 
 
+
+# afficher_monstre()
+# affiche les stats du monstre tiré de la bdd
 
 
 
@@ -42,7 +40,8 @@ db = client["jeu_db"]
 def separateur():
     print("----------------------------------------")
 
-
+def saut():
+    print("\n")
 
 
 
@@ -119,6 +118,7 @@ def save_score(nom_joueur, vague):
     }
     classement.insert_one(doc)
     print(f"Score sauvegardé : {nom_joueur} - vague {vague}")
+    saut()
 
 def afficher_classement():
     classement = db["classement"]
@@ -134,3 +134,5 @@ def afficher_classement():
         print(f"{rang}. {p['joueur']} - Vague {p['vague']}")
         rang += 1
 
+def afficher_monstre(monstre):
+    print(str(monstre.name) + " - ATK: " + str(monstre.atk) + " - DEF: " + str(monstre.defn) + " - PV: " + str(monstre.hp))

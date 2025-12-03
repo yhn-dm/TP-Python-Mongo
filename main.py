@@ -6,10 +6,12 @@
 # gère la saisie utilisateur (3 options simples)
 
 
-from utils import input_secure, separateur, afficher_classement
+from utils import input_secure, separateur, afficher_classement, saut
 from game import start_game
 
 def afficher_menu():
+    saut()
+    saut()
     separateur()
     print("MENU PRINCIPAL")
     separateur()
