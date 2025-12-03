@@ -8,6 +8,7 @@ logique trop plate
 [boucle while](
 - tirage de monstre parmis la bdd
 - équipe attaque le mob
+- mob mort = victoire -> vague suivante
 - mob attaque un membre de l'équipe
 - membre mort = perd son tour
 - équipe mort = fin du jeu

@@ -55,4 +55,7 @@ class Team:
             if perso.is_alive() == True:
                 return False
         return True
+    
+    def call_alive_characters(self): # appel des personnages vivants uniquement
+        return [c for c in self.characters if c.is_alive()]
 

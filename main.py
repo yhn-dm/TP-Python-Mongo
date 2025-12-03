@@ -45,5 +45,5 @@ def main():
 
 
 
-if __name__ == "__main__": # necessaire pour test
+if __name__ == "__main__":
     main()

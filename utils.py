@@ -16,15 +16,13 @@
 # input_nombre(message, min_val, max_val)
 # vérifie que le monbre est dans la bonne plage
 
-
+# afficher_monstre()
+# affiche les stats du monstre tiré de la bdd
 
 
 
 # get_random_monster(mongo)
 # retourne un monstre aléatoire depuis la bdd
-
-# afficher_monstre()
-# affiche les stats du monstre tiré de la bdd
 
 # afficher_classement(mongo)
 # affiche les 3 meilleurs scores tiré de la bdd
@@ -81,7 +79,7 @@ def afficher_equipe(equipe): #affiche les 3 personnages choisis
     separateur()
 
 
-def input_secure(message, options_valides):
+def input_secure(message, options_valides): #vérifie que les input sont bien ["1", "2", "3"]
     choix = input(message)
     choix = choix.strip()
 
@@ -95,7 +93,7 @@ def input_secure(message, options_valides):
 
 
 
-def input_nombre(message, min_val, max_val):
+def input_nombre(message, min_val, max_val): # choix = input_nombre(message, 1, len(personnages_db))
     while True:
         user_input = input(message)
 
@@ -106,3 +104,8 @@ def input_nombre(message, min_val, max_val):
                 return valeur
 
         print("Entrée invalide, réessaie.")
+
+
+def get_random_monster():
+    monsters = list(db["monsters"].find())
+    return random.choice(monsters)
