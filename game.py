@@ -60,21 +60,40 @@ def combat(equipe, vague):
 
     #while monstre isalive and not equip.alldead
         #for char in equip
-            #dmg += monstre.takedmg(char.atk)
+            #monstre.takedmg(char.atk)
             #print "char" a infligé "dmg" au monstre, il lui rest "monster.hp"
         
         #if not monster.isaline
             #print victoire
-            #?? return true = continue la boucle
+            #?? return true = retour et continue la boucle principale
         
         #if monster.isalive
             #cible = random(equip.alive char)
-            #dmg = cible takedamage (monster.atk)
+            #cible takedamage (monster.atk)
             #print "monster" a infligé "dmg" au char, il lui rest "char.hp"
 
         #if equip is alldead
             #print l'équipe a été vaincu
-            #?? return false = fin de boucle
+            #?? return false = fin de boucle principale
+        
+    while monstre.is_alive() and not equipe.all_dead() :
+        for perso in equipe.perso :
+            monstre.take_damage(perso.atk)
+            print(f"{perso} a infligé {perso.atk} au monstre, il lui reste {monstre.hp}")
+        
+        if not monstre.is_alive() :
+            print("Victoire")
+            return True
+        
+        if monstre.is_alive() :
+            cible = random.choice(equipe.call_alive_character())
+            cible.take_damage(monstre.atk)
+            print(f"{monstre} a infligé {monstre.atk} à {cible}, il lui reste {cible.hp}")
+        
+        if equipe.all_dead() :
+            print("Défaite")
+            return False
+
 
     return False
 
@@ -89,14 +108,25 @@ def start_game(nom_joueur):
     vague = 1
 
     while True:
+            #combat()
             #victoire = vague(vague)
 
             #if victoire
                 #vague += 1
+
             #else
                 #break
 
-            break
-    
-    #afficher score
+            #combat(equipe, vague)
+            victoire = combat(equipe, vague)    
+
+            if victoire :
+                vague += 1
+            else :
+                break
+
+
+
+    #print vous avez survécu jusqu'à la vague (vague)
+    print (f"Vous avez survécu jusqu'a la vague {vague}")
 
