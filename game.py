@@ -83,7 +83,7 @@ def combat(equipe, vague):
             #?? return false = fin de boucle principale
         
     while monstre.is_alive() and not equipe.all_dead() :
-        for perso in equipe.characters :
+        for perso in equipe.call_alive_characters() :
             monstre.take_damage(perso.atk - monstre.defn)
             print(
                 f"{YELLOW}{BOLD}{perso.name}{RESET} a infligé "
