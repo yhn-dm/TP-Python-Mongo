@@ -6,7 +6,7 @@
 # gère la saisie utilisateur (3 options simples)
 
 
-from utils import input_secure, separateur
+from utils import input_secure, separateur, afficher_classement
 from game import start_game
 
 def afficher_menu():
@@ -37,7 +37,7 @@ def main():
             start_game(nom)
 
         if choix == "2":
-            print("le classement pas encore disponible.")
+            afficher_classement()
             separateur()
 
         if choix == "3":

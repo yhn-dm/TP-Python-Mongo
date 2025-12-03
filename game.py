@@ -12,7 +12,7 @@ from pymongo import MongoClient
 import random
 
 from models import Character, Monster, Team
-from utils import db, separateur, afficher_personnages, afficher_equipe, input_nombre, get_random_monster
+from utils import db, separateur, afficher_personnages, afficher_equipe, input_nombre, get_random_monster, save_score
 
 
 
@@ -77,18 +77,18 @@ def combat(equipe, vague):
             #?? return false = fin de boucle principale
         
     while monstre.is_alive() and not equipe.all_dead() :
-        for perso in equipe.perso :
+        for perso in equipe.characters :
             monstre.take_damage(perso.atk)
-            print(f"{perso} a infligé {perso.atk} au monstre, il lui reste {monstre.hp}")
+            print(f"{perso.name} a infligé {perso.atk} au monstre, il lui reste {monstre.hp}")
         
         if not monstre.is_alive() :
             print("Victoire")
             return True
         
         if monstre.is_alive() :
-            cible = random.choice(equipe.call_alive_character())
+            cible = random.choice(equipe.call_alive_characters())
             cible.take_damage(monstre.atk)
-            print(f"{monstre} a infligé {monstre.atk} à {cible}, il lui reste {cible.hp}")
+            print(f"{monstre.name} a infligé {monstre.atk} à {cible.name}, il lui reste {cible.hp}")
         
         if equipe.all_dead() :
             print("Défaite")
@@ -123,6 +123,7 @@ def start_game(nom_joueur):
             if victoire :
                 vague += 1
             else :
+                save_score(nom_joueur, vague)
                 break
 
 

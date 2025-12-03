@@ -109,3 +109,28 @@ def input_nombre(message, min_val, max_val): # choix = input_nombre(message, 1, 
 def get_random_monster():
     monsters = list(db["monsters"].find())
     return random.choice(monsters)
+
+def save_score(nom_joueur, vague):
+    classement = db["classement"]
+
+    doc = {
+        "joueur": nom_joueur,
+        "vague": vague
+    }
+    classement.insert_one(doc)
+    print(f"Score sauvegardé : {nom_joueur} - vague {vague}")
+
+def afficher_classement():
+    classement = db["classement"]
+
+    separateur()
+    print("Classement des meilleurs joueurs")
+    separateur()
+
+    top = classement.find().sort("vague", -1).limit(3)
+
+    rang = 1
+    for p in top:
+        print(f"{rang}. {p['joueur']} - Vague {p['vague']}")
+        rang += 1
+
