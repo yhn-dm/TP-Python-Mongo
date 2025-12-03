@@ -12,9 +12,14 @@ from pymongo import MongoClient
 import random
 
 from models import Character, Monster, Team
-from utils import db, separateur, afficher_personnages, afficher_equipe, input_nombre, get_random_monster, save_score
+from utils import db, separateur, afficher_personnages, afficher_equipe, input_nombre, get_random_monster, save_score, afficher_classement, saut, afficher_monstre
 
+RESET = "\033[0m"
+BOLD = "\033[1m"
+ITALIC = "\033[3m"
 
+YELLOW = "\033[33m"
+RED = "\033[31m"
 
 
 
@@ -57,6 +62,7 @@ def combat(equipe, vague):
     #récum mob
     monstre_data = get_random_monster()
     monstre = Monster(monstre_data["name"], monstre_data["atk"], monstre_data["def"], monstre_data["hp"])
+    afficher_monstre(monstre)
 
     #while monstre isalive and not equip.alldead
         #for char in equip
@@ -78,17 +84,28 @@ def combat(equipe, vague):
         
     while monstre.is_alive() and not equipe.all_dead() :
         for perso in equipe.characters :
-            monstre.take_damage(perso.atk)
-            print(f"{perso.name} a infligé {perso.atk} au monstre, il lui reste {monstre.hp}")
+            monstre.take_damage(perso.atk - monstre.defn)
+            print(
+                f"{YELLOW}{BOLD}{perso.name}{RESET} a infligé "
+                f"{ITALIC}{monstre.atk- monstre.defn}{RESET} au "
+                f"{RED}{BOLD}{monstre.name}{RESET}, il lui reste "
+                f"{ITALIC}{monstre.hp}{RESET}"
+            )
         
         if not monstre.is_alive() :
             print("Victoire")
+            saut()
             return True
         
         if monstre.is_alive() :
             cible = random.choice(equipe.call_alive_characters())
-            cible.take_damage(monstre.atk)
-            print(f"{monstre.name} a infligé {monstre.atk} à {cible.name}, il lui reste {cible.hp}")
+            cible.take_damage(monstre.atk-monstre.defn)
+            print(
+            f"{RED}{BOLD}{monstre.name}{RESET} a infligé "
+            f"{ITALIC}{monstre.atk- monstre.defn}{RESET} à "
+            f"{YELLOW}{BOLD}{cible.name}{RESET}, il lui reste "
+            f"{ITALIC}{cible.hp}{RESET}"
+            )
         
         if equipe.all_dead() :
             print("Défaite")
@@ -124,10 +141,12 @@ def start_game(nom_joueur):
                 vague += 1
             else :
                 save_score(nom_joueur, vague)
+                #print vous avez survécu jusqu'à la vague (vague)
+                print (f"Vous avez survécu jusqu'a la vague {vague}")
+                afficher_classement()
                 break
 
 
 
-    #print vous avez survécu jusqu'à la vague (vague)
-    print (f"Vous avez survécu jusqu'a la vague {vague}")
+    
 
