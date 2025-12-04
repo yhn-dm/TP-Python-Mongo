@@ -1,4 +1,4 @@
-#Jeu RPG Textuel – Système de Vagues et Monstres
+# Jeu RPG Textuel – Système de Vagues et Monstres
 Un petit jeu RPG en Python où vous devez survivre à un nombre infini de vagues de monstres. Construisez votre équipe, combattez automatiquement et tentez d'atteindre la vague la plus élevée possible !
 
 ---
@@ -20,4 +20,4 @@ La partie continue jusqu’à ce que l’équipe entière soit vaincue.
 ---
 
 Tenez le plus longtemps possible et atteignez la vague la plus élevée.
-Optimisez votre équipe, apprenez comment le système de rareté fonctionne… et survivez !
+Optimisez l'équipe, apprenez comment le système de rareté fonctionne… et survivez !
