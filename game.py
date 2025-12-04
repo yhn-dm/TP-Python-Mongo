@@ -12,12 +12,11 @@ from pymongo import MongoClient
 import random
 
 from models import Character, Monster, Team
-from utils import db, separateur, afficher_personnages, afficher_equipe, input_nombre, get_random_monster, save_score, afficher_classement, saut, afficher_monstre
+from utils import db, separateur, afficher_personnages, afficher_equipe, input_nombre, get_random_monster, save_score, afficher_classement, saut, afficher_monstre, RARETE_LVL_MULT
 
 RESET = "\033[0m"
 BOLD = "\033[1m"
 ITALIC = "\033[3m"
-
 YELLOW = "\033[33m"
 RED = "\033[31m"
 
@@ -58,9 +57,8 @@ def creer_equipe():
 
 def combat(equipe, vague):
     print(f"===== VAGUE {vague} =====")
-
-    #récum mob
-    monstre_db = get_random_monster()
+    
+    monstre_db = get_random_monster(vague)
     monstre = Monster(monstre_db["name"], 
                     monstre_db["atk"], 
                     monstre_db["def"], 
@@ -68,6 +66,7 @@ def combat(equipe, vague):
                     monstre_db["rarity"],
                     level=0,
                     xp_base=monstre_db["xp_drop"])
+    monstre.generate_monster_level(equipe, vague)
     afficher_monstre(monstre)
 
     #while monstre isalive and not equip.alldead
@@ -103,7 +102,8 @@ def combat(equipe, vague):
 
             print("Victoire")
             xp_gain = monstre.xp_drop(vague)#send également la vague
-            perso.get_xp(xp_gain)
+            for perso in equipe.call_alive_characters():
+                perso.get_xp(xp_gain)
             print(f"Le monstre drop {xp_gain} d'XP ! {perso.name} reçoit ainsi {xp_gain} XP !")
             saut()
             return True

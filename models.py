@@ -10,6 +10,9 @@
 # classe Team
 # - vérifier si tous sont morts
 
+from utils import get_rarity_from_wave, RARETE_LVL_MULT
+import random
+
 class Character:
     def __init__(self, name, atk, defn, hp, level=0, xp=0):
         """initialise les stats -> rareté/level/xp initialisé dans le vide"""
@@ -36,15 +39,12 @@ class Character:
             self.level += 1
             self.update_stats()
 
-
     #def update_stats(self): scalling joueur : ATK +4% / DEF +3% / HP +10% par niveau
     def update_stats(self):
         """update les stats du joueur  incrémentalement d'après les valeurs basales selon le niveau"""
         self.atk = int(self.base_atk *(1 + 0.04 *(self.level)))
         self.defense = int(self.base_defense *(1 +0.03 *(self.level)))
         self.hp = int(self.base_hp *(1 +0.10 *(self.level)))
-
-
 
     def is_alive(self):
         if self.hp > 0:
@@ -71,8 +71,6 @@ class Monster:
         self.level = level
         self.base_xp = xp_base
         self.update_stats()
-        
-        
 
     #def xp_drop(self) xp_base * (1 + niveau_mob *0.1) * (1 + wave*0.05)
     def xp_drop(self,wave):
@@ -80,14 +78,22 @@ class Monster:
         xp = int(self.base_xp * (1 + self.level *0.1) * (1 + wave *0.05))
         return xp
     
+    def generate_monster_level(self, equipe, wave):
+        rarity = get_rarity_from_wave(wave)
+        self.rarity = rarity
+
+        mult = RARETE_LVL_MULT[rarity]
+        team_lvl = equipe.team_level()
+        self.level = max(1, int(team_lvl * wave * mult * random.uniform(0.02, 2.0)))
+        self.update_stats()
+        return self
+    
     ##def update_stats(self): scalling mob : ATK +6% / DEF +4% / HP +15% par niveau
     def update_stats(self):
         """update les stats du mob d'après les valeurs basales incrémentalement selon le niveau"""
         self.atk = int(self.base_atk * (1 + 0.06 *(self.level)))
         self.defense = int(self.base_defn * (1 + 0.04 *(self.level)))
         self.hp = int(self.base_hp * (1 + 0.15 *(self.level)))
-
-
 
     def is_alive(self):
         return self.hp > 0
@@ -104,7 +110,7 @@ class Team:
     
     #def team_level(self): = int((p1 + p2 + p3) / 3)
     def team_level(self):
-        return int((self.p1 + self.p2 + self.p3) / 3)
+        return int(sum(c.level for c in self.characters / len(self.characters)))
 
 
     def all_dead(self):

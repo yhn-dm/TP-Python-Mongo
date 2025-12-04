@@ -34,6 +34,14 @@
 from pymongo import MongoClient
 import random
 
+RARETE_LVL_MULT = {
+    "NORMAL": 1,
+    "RARE": 3,
+    "EPIC": 9,
+    "BOSS": 27,
+    "LEGENDAIRE" : 81,
+}
+
 client = MongoClient("mongodb://localhost:27017/")
 db = client["jeu_db"]
 
@@ -114,9 +122,13 @@ def input_nombre(message, min_val, max_val):
 
 
 
-def get_random_monster():
+def get_random_monster(wave):
     """draw un monstre random parmis la bdd"""
-    monsters = list(db["monsters"].find())
+    rarity = get_rarity_from_wave(wave)
+    monsters = list(db["monsters"].find({"rarity": rarity}))
+
+    if not monsters:
+        monsters = list(db["monsters"].find())
     return random.choice(monsters)
 
 
@@ -154,3 +166,39 @@ def afficher_classement():
 
 def afficher_monstre(monstre):
     print(str(monstre.name) + " - ATK: " + str(monstre.atk) + " - DEF: " + str(monstre.defense) + " - PV: " + str(monstre.hp))
+
+
+def get_rarity_from_wave(wave):
+    """Génère la rareté du mob random*wave"""
+    r = random.random() * 100  # pourcentage sur 100
+
+
+    if wave <= 20:
+        if r < 80: return "NORMAL"
+        elif r < 95: return "RARE"
+        else: return "EPIC"
+
+    elif wave <= 40:
+        if r < 50: return "NORMAL"
+        elif r < 85: return "RARE"
+        elif r < 97: return "EPIC"
+        else: return "BOSS"
+
+    elif wave <= 60:
+        if r < 10: return "NORMAL"
+        elif r < 60: return "RARE"
+        elif r < 90: return "EPIC"
+        elif r < 99: return "BOSS"
+        else: return "LEGENDAIRE"
+
+    elif wave <= 80:
+        if r < 10: return "RARE"
+        elif r < 75: return "EPIC"
+        elif r < 95: return "BOSS"
+        else: return "LEGENDAIRE"
+
+    else:
+        if r < 15: return "RARE"
+        elif r < 65: return "EPIC"
+        elif r < 90: return "BOSS"
+        else: return "LEGENDAIRE"

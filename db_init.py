@@ -161,7 +161,7 @@ monstres_data = [
 
 
 
-
+    
     # normal x1
     {"name": "Loup-garou", "atk": 28, "def": 18, "hp": 180, "rarity": "NORMAL", "xp_drop": 5},
     # rare x3
