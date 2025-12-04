@@ -1,15 +1,3 @@
-
-# classe Character
-# - attributs : name, atk, defn, hp
-# - méthode pour attaquer
-
-# classe Monster
-# - attributs : name, atk, defn, hp
-# - méthode pour attaquer
-
-# classe Team
-# - vérifier si tous sont morts
-
 # ==============================================================
 # ==============================================================
 # class Character
@@ -27,10 +15,8 @@ class Character:
         self.xp = xp
         self.update_stats()
 
-
-    # def get_xp(self)
     def get_xp(self, amount):
-        """récupère l'xp et gère automatiquement le lvlup, amount récupéré de fonc combat""" #à décomposer
+        """récupère l'xp et gère automatiquement le lvlup, amount récupéré de fonc combat"""
         self.xp += amount
         while self.xp >= self.xp_to_nextlvl():
             self.xp -= self.xp_to_nextlvl()
@@ -38,7 +24,6 @@ class Character:
             self.level += 1
             self.update_stats()
 
-    #def xp_to_nextlvl(self): xp_to_nextlvl = 50 + (niveau*30)
     def xp_to_nextlvl(self):
         """défini l'xp nécessaire pour passer au prochain lvl"""
         return 5 + (self.level*2)
@@ -47,9 +32,8 @@ class Character:
         """défini combien d'xp il manque au character pour lvl up"""
         return self.xp_to_nextlvl() - self.xp
 
-    #def update_stats(self): scalling joueur : ATK +4% / DEF +3% / HP +10% par niveau
     def update_stats(self):
-        """update les stats du joueur  incrémentalement d'après les valeurs basales selon le niveau"""  #à patch
+        """update les stats du joueur  incrémentalement d'après les valeurs basales selon le niveau"""
         self.atk = int(self.base_atk *(1 + 0.16 *(self.level)))
         self.defense = int(self.base_defense *(1 +0.14 *(self.level)))
         self.hp = int(self.base_hp *(1 +0.30 *(self.level)))
@@ -62,7 +46,7 @@ class Character:
             return False
 
     def take_damage(self, amt):
-        """calcul les dégats subits en flat""" #à rework flat lvl + % armor value
+        """calcul les dégats subits en flat"""
         reduction = self.defense // 5 
         damage = amt - reduction
         if damage < 1:
@@ -82,7 +66,7 @@ class Character:
 # ==============================================================
 
 class Monster:
-    def __init__(self, name, atk, defense, hp, rarity="normal", level=0, xp_base=0): #initialisé à normal
+    def __init__(self, name, atk, defense, hp, rarity="normal", level=0, xp_base=0):
         """initialise les stats -> rareté/level/xp initialisé dans le vide"""
         self.name = name
         self.base_atk = atk
@@ -94,13 +78,12 @@ class Monster:
         self.base_xp = xp_base
         self.update_stats()
 
-    #def xp_drop(self) xp_base * (1 + niveau_mob *0.1) * (1 + wave*0.05)
+
     def xp_drop(self,wave):
-        """défini l'xp du mob seulement""" # = fonction de récup d'xp nécessaire coté joeuur
+        """défini l'xp du mob seulement"""
         xp = int(self.base_xp * (1 + self.level *0.1) * (1 + wave *0.05))
         return xp
     
-    ##def update_stats(self): scalling mob : ATK +6% / DEF +4% / HP +15% par niveau
     def update_stats(self):
         """update les stats du mob d'après les valeurs basales incrémentalement selon le niveau""" #à patch
         self.atk = int(self.base_atk * (1 + 0.06 *(self.level)))
@@ -112,7 +95,7 @@ class Monster:
         return self.hp > 0
 
     def take_damage(self, amount):
-        """calcul les dégats subits en flat""" #à rework flat lvl + % armor value
+        """calcul les dégats subits en flat"""
         reduction = self.defense // 5 
         damage = amount - reduction
         if damage < 1:
@@ -135,9 +118,8 @@ class Team:
     def __init__(self, characters):
         self.characters = characters
     
-    #def team_level(self): = int((p1 + p2 + p3) / 3)
     def team_level(self):
-        """calcul et retourne le niveau de la team""" #inutile ???
+        """calcul et retourne le niveau de la team"""
         return int(sum (c.level for c in self.characters) / len(self.characters))
 
     def all_dead(self):

@@ -43,7 +43,6 @@ def afficher_equipe(equipe):
     numero = 1
     for c in equipe.characters:
         """format : 1. Nom - ATK: 00 - DEF: 00 - PV: 00"""
-        # DEBUG c = character de l'equipe <- creer l'équipe <- model constructeur (probleme update)
         print(str(numero) + ". " + c.name + " - ATK: " + str(c.atk) + " - DEF: " + str(c.defense) + " - PV: " + str(c.hp))
         numero = numero + 1
 

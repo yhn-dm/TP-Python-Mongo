@@ -36,7 +36,7 @@ def get_random_monster(wave):
 
 def get_monster_rarity_from_wave(wave):
     """Génère la rareté du mob random*wave"""
-    r = random.random() * 100  # pourcentage sur 100
+    r = random.random() * 100
 
 
     if wave <= 100:
@@ -113,7 +113,7 @@ def monster_atk_turn(monstre, equipe):
         )
 
 def monster_defeated(monstre, wave, equipe):
-    xp_gain = monstre.xp_drop(wave)#send également la vague
+    xp_gain = monstre.xp_drop(wave)
     for perso in equipe.call_alive_characters():
         perso.get_xp(xp_gain)
     print(f"Le monstre drop {xp_gain} d'XP ! L'équipe reçoit ainsi {xp_gain} XP !")

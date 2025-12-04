@@ -1,5 +1,0 @@
-- formatage à faire
-- temporisation à faire
-- joueur mort continue d'attaquer
-- monstre tiré non annoncé
-- à la fin de la partie, le joueur doit automatiquement voir les 3 meilleurs scores
