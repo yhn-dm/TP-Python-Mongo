@@ -27,16 +27,19 @@ personnages_data = [
 ]
 
 monstres_data = [
-    {"name": "Gobelin", "atk": 10, "def": 5, "hp": 50},
-    {"name": "Orc", "atk": 20, "def": 8, "hp": 120},
-    {"name": "Dragon", "atk": 35, "def": 20, "hp": 300},
-    {"name": "Zombie", "atk": 12, "def": 6, "hp": 70},
-    {"name": "Troll", "atk": 25, "def": 15, "hp": 200},
-    {"name": "Spectre", "atk": 18, "def": 10, "hp": 100},
-    {"name": "Golem", "atk": 30, "def": 25, "hp": 250},
-    {"name": "Vampire", "atk": 22, "def": 12, "hp": 150},
-    {"name": "Loup-garou", "atk": 28, "def": 18, "hp": 180},
-    {"name": "Squelette", "atk": 15, "def": 7, "hp": 90},
+    {"name": "Gobelin", "atk": 10, "def": 5, "hp": 50, "rarity": "NORMAL", "xp_drop": 5},
+    {"name": "Hobgobelin Warrior", "atk": 30, "def": 15, "hp": 150, "rarity": "RARE", "xp_drop": 20},
+    {"name": "Hobgobelin Shaman", "atk": 30, "def": 15, "hp": 150, "rarity": "RARE", "xp_drop": 20},
+
+    {"name": "Orc", "atk": 20, "def": 8, "hp": 120, "rarity": "NORMAL", "xp_drop": 5},
+    {"name": "Dragon", "atk": 35, "def": 20, "hp": 300, "rarity": "NORMAL", "xp_drop": 5},
+    {"name": "Zombie", "atk": 12, "def": 6, "hp": 70, "rarity": "NORMAL", "xp_drop": 5},
+    {"name": "Troll", "atk": 25, "def": 15, "hp": 200, "rarity": "NORMAL", "xp_drop": 5},
+    {"name": "Spectre", "atk": 18, "def": 10, "hp": 100, "rarity": "NORMAL", "xp_drop": 5},
+    {"name": "Golem", "atk": 30, "def": 25, "hp": 250, "rarity": "NORMAL", "xp_drop": 5},
+    {"name": "Vampire", "atk": 22, "def": 12, "hp": 150, "rarity": "NORMAL", "xp_drop": 5},
+    {"name": "Loup-garou", "atk": 28, "def": 18, "hp": 180, "rarity": "NORMAL", "xp_drop": 5},
+    {"name": "Squelette", "atk": 15, "def": 7, "hp": 90, "rarity": "NORMAL", "xp_drop": 5},
 ]
 
 

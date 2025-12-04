@@ -87,7 +87,7 @@ def combat(equipe, vague):
             monstre.take_damage(perso.atk - monstre.defn)
             print(
                 f"{YELLOW}{BOLD}{perso.name}{RESET} a infligé "
-                f"{ITALIC}{monstre.atk- monstre.defn}{RESET} au "
+                f"{ITALIC}{monstre.atk- monstre.defn}{RESET} au " #a corriger
                 f"{RED}{BOLD}{monstre.name}{RESET}, il lui reste "
                 f"{ITALIC}{monstre.hp}{RESET}"
             )
@@ -99,10 +99,10 @@ def combat(equipe, vague):
         
         if monstre.is_alive() :
             cible = random.choice(equipe.call_alive_characters())
-            cible.take_damage(monstre.atk-monstre.defn)
+            cible.take_damage(monstre.atk - cible.defense)
             print(
             f"{RED}{BOLD}{monstre.name}{RESET} a infligé "
-            f"{ITALIC}{monstre.atk- monstre.defn}{RESET} à "
+            f"{ITALIC}{monstre.atk - cible.defn}{RESET} à " #a corriger
             f"{YELLOW}{BOLD}{cible.name}{RESET}, il lui reste "
             f"{ITALIC}{cible.hp}{RESET}"
             )
