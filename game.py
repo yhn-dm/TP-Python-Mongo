@@ -1,26 +1,12 @@
-
-
-# creer l'équipe
-# lance le jeu et c'est tout start_game contient le plateau de jeu complet et donc le systeme automatique de combat 
-# d'après les règles de models.py donc des 3 classes
-
-
-
-
-
-from pymongo import MongoClient
 import random
-
-from models import Character, Monster, Team
-from utils import db, separateur, afficher_personnages, afficher_equipe, input_nombre, get_random_monster, save_score, afficher_classement, saut, afficher_monstre, RARETE_LVL_MULT
-
-RESET = "\033[0m"
-BOLD = "\033[1m"
-ITALIC = "\033[3m"
-YELLOW = "\033[33m"
-RED = "\033[31m"
+from models import Character, Team
+from utils import db ,separateur, afficher_personnages, afficher_equipe, input_nombre, saut
+from wave import create_monster_for_wave, character_atk_turn, monster_atk_turn, monster_defeated, team_defeated
 
 
+# ==============================================================
+# ???
+# ==============================================================
 
 def creer_equipe():
     personnages_db = list(db["characters"].find())
@@ -46,7 +32,6 @@ def creer_equipe():
             perso_db["hp"]
         )
 
-
         equipe_personnages.append(perso)
         i = i + 1
 
@@ -55,19 +40,15 @@ def creer_equipe():
 
     return equipe
 
-def combat(equipe, vague):
-    print(f"===== VAGUE {vague} =====")
-    
-    monstre_db = get_random_monster(vague)
-    monstre = Monster(monstre_db["name"], 
-                    monstre_db["atk"], 
-                    monstre_db["def"], 
-                    monstre_db["hp"],
-                    monstre_db["rarity"],
-                    level=0,
-                    xp_base=monstre_db["xp_drop"])
-    monstre.generate_monster_level(equipe, vague)
-    afficher_monstre(monstre)
+
+
+# ==============================================================
+# Game logic
+# ==============================================================
+
+def combat(equipe, wave):
+    print(f"===== VAGUE {wave} =====")
+    monstre = create_monster_for_wave(wave, equipe)
 
     #while monstre isalive and not equip.alldead
         #for char in equip
@@ -88,55 +69,30 @@ def combat(equipe, vague):
             #?? return false = fin de boucle principale
         
     while monstre.is_alive() and not equipe.all_dead() :
-        for perso in equipe.call_alive_characters() :
-            monstre.take_damage(perso.atk - monstre.defense)
-            print(
-                f"{YELLOW}{BOLD}{perso.name}{RESET} a infligé "
-                f"{ITALIC}{perso.atk - monstre.defense}{RESET} au "
-                f"{RED}{BOLD}{monstre.name}{RESET}, il lui reste "
-                f"{ITALIC}{monstre.hp}{RESET}"
-            )
+        character_atk_turn(equipe, monstre)
         
         if not monstre.is_alive() :
             #récupère valeur d'xp_drop du mob -> envoie amount à get_xp
 
             print("Victoire")
-            xp_gain = monstre.xp_drop(vague)#send également la vague
-            for perso in equipe.call_alive_characters():
-                perso.get_xp(xp_gain)
-            print(f"Le monstre drop {xp_gain} d'XP ! L'équipe reçoit ainsi {xp_gain} XP !")
-
-            for perso in equipe.call_alive_characters():
-                print(f"{perso.name} - lvl {perso.level} nécessite pour le prochain niveau {perso.xp_restante()} XP")
-            saut()
+            monster_defeated(monstre, wave, equipe)
             return True
         
         if monstre.is_alive() :
-            cible = random.choice(equipe.call_alive_characters())
-            cible.take_damage(monstre.atk - cible.defense)
-            print(
-            f"{RED}{BOLD}{monstre.name}{RESET} a infligé "
-            f"{ITALIC}{monstre.atk - cible.defense}{RESET} à "
-            f"{YELLOW}{BOLD}{cible.name}{RESET}, il lui reste "
-            f"{ITALIC}{cible.hp}{RESET}"
-            )
-        
+            monster_atk_turn(monstre, equipe)
+            
         if equipe.all_dead() :
             print("Défaite")
             return False
 
-
     return False
-
 
 def start_game(nom_joueur):
     separateur()
-    print("Debut de la partie pour " + nom_joueur)
+    print(nom_joueur + "débute la partie !! Souhaitez-lui bon chance !!")
     separateur()
-
     equipe = creer_equipe()
-
-    vague = 1
+    wave = 1
 
     while True:
             #combat()
@@ -148,19 +104,11 @@ def start_game(nom_joueur):
             #else
                 #break
 
-            #combat(equipe, vague)
-            victoire = combat(equipe, vague)    
+            victoire = combat(equipe, wave)    
 
             if victoire :
-                vague += 1
+                wave += 1
             else :
-                save_score(nom_joueur, vague)
                 #print vous avez survécu jusqu'à la vague (vague)
-                print (f"Vous avez survécu jusqu'a la vague {vague}")
-                afficher_classement()
+                team_defeated(wave, nom_joueur)
                 break
-
-
-
-    
-

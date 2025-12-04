@@ -1,49 +1,14 @@
-
-# connexion bdd
-
-# separateur()
-# imprime "------------------------"
-
-# afficher_personnages(liste)
-# affiche les persos disponibles pour créer une équipe
-
-# afficher_equipe(equipe)
-#  affiche les 3 personnages choisis et leurs stats
-
-# input_secure(message, liste_valide)
-# sécurise le choix utilisateur
-
-# input_nombre(message, min_val, max_val)
-# vérifie que le monbre est dans la bonne plage
-
-# get_random_monster(mongo)
-# retourne un monstre aléatoire depuis la bdd
-
-# afficher_classement(mongo)
-# affiche les 3 meilleurs scores tiré de la bdd
-
-
-
-# afficher_monstre()
-# affiche les stats du monstre tiré de la bdd
-
-
-
-
+# ==============================================================
+# Import DB
+# ==============================================================
 
 from pymongo import MongoClient
-import random
-
-RARETE_LVL_MULT = {
-    "NORMAL": 1,
-    "RARE": 2,
-    "EPIC": 4,
-    "BOSS": 8,
-    "LEGENDAIRE" : 16,
-}
-
 client = MongoClient("mongodb://localhost:27017/")
 db = client["jeu_db"]
+
+# ==============================================================
+# Fonction d'affichages
+# ==============================================================
 
 def separateur():
     print("----------------------------------------")
@@ -51,11 +16,7 @@ def separateur():
 def saut():
     print("\n")
 
-
-
-
-
-def afficher_personnages(personnages): #depuis le dictionnaire
+def afficher_personnages(personnages):
     """affiche les personnages disponible dans le menu"""
     separateur()
     print("Personnages disponibles :")
@@ -70,8 +31,8 @@ def afficher_personnages(personnages): #depuis le dictionnaire
 
     separateur()
 
-
-
+def afficher_monstre_stats(monstre):
+    print(str(monstre.name) + " - LEVEL: " + str(monstre.level) + " - ATK: " + str(monstre.atk) + " - DEF: " + str(monstre.defense) + " - PV: " + str(monstre.hp))
 
 def afficher_equipe(equipe):
     """affiche les 3 personnages choisis dans le menu"""
@@ -89,9 +50,12 @@ def afficher_equipe(equipe):
     separateur()
 
 
+# ==============================================================
+# User Input secure
+# ==============================================================
 
-def input_secure(message, options_valides): #
-    """vérifie que les input sont bien ["1", "2", "3"]"""
+def input_secure(message, options_valides):
+    """vérifie que les input sont bien ["1","2","3"]"""
     choix = input(message)
     choix = choix.strip()
 
@@ -101,9 +65,6 @@ def input_secure(message, options_valides): #
         choix = choix.strip()
 
     return choix
-
-
-
 
 def input_nombre(message, min_val, max_val):
     """vérifie que le choix rentre dans la plage de 1 à x
@@ -121,31 +82,21 @@ def input_nombre(message, min_val, max_val):
         print("Entrée invalide, réessaie.")
 
 
+# ==============================================================
+# gestion classement
+# ==============================================================
 
-def get_random_monster(wave):
-    """draw un monstre random parmis la bdd"""
-    rarity = get_rarity_from_wave(wave)
-    monsters = list(db["monsters"].find({"rarity": rarity}))
-
-    if not monsters:
-        monsters = list(db["monsters"].find())
-    return random.choice(monsters)
-
-
-
-def save_score(nom_joueur, vague):
+def save_score(nom_joueur, wave):
     """enregistre le score dans la bdd classement"""
     classement = db["classement"]
 
     doc = {
         "joueur": nom_joueur,
-        "vague": vague
+        "vague": wave
     }
     classement.insert_one(doc)
-    print(f"Score sauvegardé : {nom_joueur} - vague {vague}")
+    print(f"Score sauvegardé : {nom_joueur} - vague {wave}")
     saut()
-
-
 
 def afficher_classement():
     """lis la table classement dans la bdd"""
@@ -161,44 +112,3 @@ def afficher_classement():
     for p in top:
         print(f"{rang}. {p['joueur']} - Vague {p['vague']}")
         rang += 1
-
-
-
-def afficher_monstre(monstre):
-    print(str(monstre.name) + " - LEVEL: " + str(monstre.level) + " - ATK: " + str(monstre.atk) + " - DEF: " + str(monstre.defense) + " - PV: " + str(monstre.hp))
-
-
-def get_rarity_from_wave(wave):
-    """Génère la rareté du mob random*wave"""
-    r = random.random() * 100  # pourcentage sur 100
-
-
-    if wave <= 30:
-        if r < 98: return "NORMAL"
-        elif r < 99: return "NORMAL"
-        else: return "NORMAL"
-
-    elif wave <= 60:
-        if r < 50: return "NORMAL"
-        elif r < 85: return "RARE"
-        elif r < 97: return "EPIC"
-        else: return "BOSS"
-
-    elif wave <= 90:
-        if r < 10: return "NORMAL"
-        elif r < 60: return "RARE"
-        elif r < 90: return "EPIC"
-        elif r < 99: return "BOSS"
-        else: return "LEGENDAIRE"
-
-    elif wave <= 120:
-        if r < 10: return "RARE"
-        elif r < 75: return "EPIC"
-        elif r < 95: return "BOSS"
-        else: return "LEGENDAIRE"
-
-    else:
-        if r < 15: return "RARE"
-        elif r < 65: return "EPIC"
-        elif r < 90: return "BOSS"
-        else: return "LEGENDAIRE"

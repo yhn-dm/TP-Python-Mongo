@@ -10,8 +10,11 @@
 # classe Team
 # - vérifier si tous sont morts
 
-from utils import get_rarity_from_wave, RARETE_LVL_MULT
-import random
+# ==============================================================
+# ==============================================================
+# class Character
+# ==============================================================
+# ==============================================================
 
 class Character:
     def __init__(self, name, atk, defn, hp, level=0, xp=0):
@@ -27,7 +30,7 @@ class Character:
 
     # def get_xp(self)
     def get_xp(self, amount):
-        """récupère l'xp et gère automatiquement le lvlup, amount récupéré de fonc combat"""
+        """récupère l'xp et gère automatiquement le lvlup, amount récupéré de fonc combat""" #à décomposer
         self.xp += amount
         while self.xp >= self.xp_to_nextlvl():
             self.xp -= self.xp_to_nextlvl()
@@ -37,32 +40,46 @@ class Character:
 
     #def xp_to_nextlvl(self): xp_to_nextlvl = 50 + (niveau*30)
     def xp_to_nextlvl(self):
-        """défini l'xp nécessaire pour monter de lvl"""
+        """défini l'xp nécessaire pour passer au prochain lvl"""
         return 5 + (self.level*2)
-    
 
-    def xp_restante(self):
+    def xp_needed_to_nextlvl(self):
+        """défini combien d'xp il manque au character pour lvl up"""
         return self.xp_to_nextlvl() - self.xp
 
     #def update_stats(self): scalling joueur : ATK +4% / DEF +3% / HP +10% par niveau
     def update_stats(self):
-        """update les stats du joueur  incrémentalement d'après les valeurs basales selon le niveau"""
+        """update les stats du joueur  incrémentalement d'après les valeurs basales selon le niveau"""  #à patch
         self.atk = int(self.base_atk *(1 + 0.16 *(self.level)))
         self.defense = int(self.base_defense *(1 +0.14 *(self.level)))
         self.hp = int(self.base_hp *(1 +0.30 *(self.level)))
 
     def is_alive(self):
+        """vérifie si le character est mort"""
         if self.hp > 0:
             return True
         else:
             return False
 
     def take_damage(self, amt):
-        self.hp = self.hp - amt
+        """calcul les dégats subits en flat""" #à rework flat lvl + % armor value
+        reduction = self.defense // 5 
+        damage = amt - reduction
+        if damage < 1:
+            damage = 0
+        self.hp = self.hp - damage
         if self.hp < 0:
             self.hp = 0
 
 
+
+
+
+# ==============================================================
+# ==============================================================
+# class Monstre
+# ==============================================================
+# ==============================================================
 
 class Monster:
     def __init__(self, name, atk, defense, hp, rarity="normal", level=0, xp_base=0): #initialisé à normal
@@ -83,31 +100,36 @@ class Monster:
         xp = int(self.base_xp * (1 + self.level *0.1) * (1 + wave *0.05))
         return xp
     
-    def generate_monster_level(self, equipe, wave):
-        rarity = get_rarity_from_wave(wave)
-        self.rarity = rarity
-
-        mult = RARETE_LVL_MULT[rarity]
-        team_lvl = equipe.team_level()
-        self.level = max(1, int(team_lvl * wave * mult * random.uniform(0.02, 0.05)))
-        self.update_stats()
-        return self
-    
     ##def update_stats(self): scalling mob : ATK +6% / DEF +4% / HP +15% par niveau
     def update_stats(self):
-        """update les stats du mob d'après les valeurs basales incrémentalement selon le niveau"""
+        """update les stats du mob d'après les valeurs basales incrémentalement selon le niveau""" #à patch
         self.atk = int(self.base_atk * (1 + 0.06 *(self.level)))
         self.defense = int(self.base_defn * (1 + 0.04 *(self.level)))
         self.hp = int(self.base_hp * (1 + 0.15 *(self.level)))
 
     def is_alive(self):
+        """vérifie si le mob est mort"""
         return self.hp > 0
 
     def take_damage(self, amount):
-        self.hp = self.hp - amount
+        """calcul les dégats subits en flat""" #à rework flat lvl + % armor value
+        reduction = self.defense // 5 
+        damage = amount - reduction
+        if damage < 1:
+            damage = 0
+        self.hp = self.hp - damage
         if self.hp < 0:
             self.hp = 0
 
+
+
+
+
+# ==============================================================
+# ==============================================================
+# class Team
+# ==============================================================
+# ==============================================================
 
 class Team:
     def __init__(self, characters):
@@ -115,16 +137,18 @@ class Team:
     
     #def team_level(self): = int((p1 + p2 + p3) / 3)
     def team_level(self):
+        """calcul et retourne le niveau de la team""" #inutile ???
         return int(sum (c.level for c in self.characters) / len(self.characters))
 
-
     def all_dead(self):
+        """vérifie si tous les joueurs sont morts"""
         for perso in self.characters:
             if perso.is_alive() == True:
                 return False
         return True
     
-    def call_alive_characters(self): # appel des personnages vivants uniquement
+    def call_alive_characters(self):
+        """appel des personnages vivants uniquement"""
         return [c for c in self.characters if c.is_alive()]
     
 

@@ -1,17 +1,8 @@
-
-# - fonction afficher_menu()
-# affiche le menu principal
-
-# - fonction main()
-# gère la saisie utilisateur (3 options simples)
-
-
-from utils import input_secure, separateur, afficher_classement, saut
+from utils import input_secure, separateur, saut
 from game import start_game
+from wave import afficher_classement
 
 def afficher_menu():
-    saut()
-    saut()
     separateur()
     print("MENU PRINCIPAL")
     separateur()
@@ -22,8 +13,6 @@ def afficher_menu():
 
     choix = input_secure("Choisis une option: ", ["1", "2", "3"])
     return choix
-
-
 
 def main():
     while True:
@@ -45,7 +34,6 @@ def main():
 
         if choix == "3":
             break
-
 
 
 if __name__ == "__main__":
