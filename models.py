@@ -24,11 +24,7 @@ class Character:
         self.xp = xp
         self.update_stats()
 
-    #def xp_to_nextlvl(self): xp_to_nextlvl = 50 + (niveau*30)
-    def xp_to_nextlvl(self):
-        """défini l'xp nécessaire pour monter de lvl"""
-        return 50 + (self.level*30)
-    
+
     # def get_xp(self)
     def get_xp(self, amount):
         """récupère l'xp et gère automatiquement le lvlup, amount récupéré de fonc combat"""
@@ -39,12 +35,21 @@ class Character:
             self.level += 1
             self.update_stats()
 
+    #def xp_to_nextlvl(self): xp_to_nextlvl = 50 + (niveau*30)
+    def xp_to_nextlvl(self):
+        """défini l'xp nécessaire pour monter de lvl"""
+        return 5 + (self.level*2)
+    
+
+    def xp_restante(self):
+        return self.xp_to_nextlvl() - self.xp
+
     #def update_stats(self): scalling joueur : ATK +4% / DEF +3% / HP +10% par niveau
     def update_stats(self):
         """update les stats du joueur  incrémentalement d'après les valeurs basales selon le niveau"""
-        self.atk = int(self.base_atk *(1 + 0.04 *(self.level)))
-        self.defense = int(self.base_defense *(1 +0.03 *(self.level)))
-        self.hp = int(self.base_hp *(1 +0.10 *(self.level)))
+        self.atk = int(self.base_atk *(1 + 0.16 *(self.level)))
+        self.defense = int(self.base_defense *(1 +0.14 *(self.level)))
+        self.hp = int(self.base_hp *(1 +0.30 *(self.level)))
 
     def is_alive(self):
         if self.hp > 0:
@@ -84,7 +89,7 @@ class Monster:
 
         mult = RARETE_LVL_MULT[rarity]
         team_lvl = equipe.team_level()
-        self.level = max(1, int(team_lvl * wave * mult * random.uniform(0.02, 2.0)))
+        self.level = max(1, int(team_lvl * wave * mult * random.uniform(0.02, 0.05)))
         self.update_stats()
         return self
     
@@ -110,7 +115,7 @@ class Team:
     
     #def team_level(self): = int((p1 + p2 + p3) / 3)
     def team_level(self):
-        return int(sum(c.level for c in self.characters / len(self.characters)))
+        return int(sum (c.level for c in self.characters) / len(self.characters))
 
 
     def all_dead(self):

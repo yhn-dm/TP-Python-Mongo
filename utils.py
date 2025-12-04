@@ -36,10 +36,10 @@ import random
 
 RARETE_LVL_MULT = {
     "NORMAL": 1,
-    "RARE": 3,
-    "EPIC": 9,
-    "BOSS": 27,
-    "LEGENDAIRE" : 81,
+    "RARE": 2,
+    "EPIC": 4,
+    "BOSS": 8,
+    "LEGENDAIRE" : 16,
 }
 
 client = MongoClient("mongodb://localhost:27017/")
@@ -165,7 +165,7 @@ def afficher_classement():
 
 
 def afficher_monstre(monstre):
-    print(str(monstre.name) + " - ATK: " + str(monstre.atk) + " - DEF: " + str(monstre.defense) + " - PV: " + str(monstre.hp))
+    print(str(monstre.name) + " - LEVEL: " + str(monstre.level) + " - ATK: " + str(monstre.atk) + " - DEF: " + str(monstre.defense) + " - PV: " + str(monstre.hp))
 
 
 def get_rarity_from_wave(wave):
@@ -173,25 +173,25 @@ def get_rarity_from_wave(wave):
     r = random.random() * 100  # pourcentage sur 100
 
 
-    if wave <= 20:
-        if r < 80: return "NORMAL"
-        elif r < 95: return "RARE"
-        else: return "EPIC"
+    if wave <= 30:
+        if r < 98: return "NORMAL"
+        elif r < 99: return "NORMAL"
+        else: return "NORMAL"
 
-    elif wave <= 40:
+    elif wave <= 60:
         if r < 50: return "NORMAL"
         elif r < 85: return "RARE"
         elif r < 97: return "EPIC"
         else: return "BOSS"
 
-    elif wave <= 60:
+    elif wave <= 90:
         if r < 10: return "NORMAL"
         elif r < 60: return "RARE"
         elif r < 90: return "EPIC"
         elif r < 99: return "BOSS"
         else: return "LEGENDAIRE"
 
-    elif wave <= 80:
+    elif wave <= 120:
         if r < 10: return "RARE"
         elif r < 75: return "EPIC"
         elif r < 95: return "BOSS"

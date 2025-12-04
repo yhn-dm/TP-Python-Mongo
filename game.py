@@ -92,7 +92,7 @@ def combat(equipe, vague):
             monstre.take_damage(perso.atk - monstre.defense)
             print(
                 f"{YELLOW}{BOLD}{perso.name}{RESET} a infligé "
-                f"{ITALIC}{perso.atk - monstre.defense}{RESET} au " #a corriger
+                f"{ITALIC}{perso.atk - monstre.defense}{RESET} au "
                 f"{RED}{BOLD}{monstre.name}{RESET}, il lui reste "
                 f"{ITALIC}{monstre.hp}{RESET}"
             )
@@ -104,23 +104,22 @@ def combat(equipe, vague):
             xp_gain = monstre.xp_drop(vague)#send également la vague
             for perso in equipe.call_alive_characters():
                 perso.get_xp(xp_gain)
-            print(f"Le monstre drop {xp_gain} d'XP ! {perso.name} reçoit ainsi {xp_gain} XP !")
+            print(f"Le monstre drop {xp_gain} d'XP ! L'équipe reçoit ainsi {xp_gain} XP !")
+
+            for perso in equipe.call_alive_characters():
+                print(f"{perso.name} - lvl {perso.level} nécessite pour le prochain niveau {perso.xp_restante()} XP")
             saut()
             return True
         
         if monstre.is_alive() :
-            try: #test momentané à supprimer
-                cible = random.choice(equipe.call_alive_characters())
-                cible.take_damage(monstre.atk - cible.defense)
-                print(
-                f"{RED}{BOLD}{monstre.name}{RESET} a infligé "
-                f"{ITALIC}{monstre.atk - cible.defense}{RESET} à " #a corriger
-                f"{YELLOW}{BOLD}{cible.name}{RESET}, il lui reste "
-                f"{ITALIC}{cible.hp}{RESET}"
-                )
-            except Exception:
-                pass
-            
+            cible = random.choice(equipe.call_alive_characters())
+            cible.take_damage(monstre.atk - cible.defense)
+            print(
+            f"{RED}{BOLD}{monstre.name}{RESET} a infligé "
+            f"{ITALIC}{monstre.atk - cible.defense}{RESET} à "
+            f"{YELLOW}{BOLD}{cible.name}{RESET}, il lui reste "
+            f"{ITALIC}{cible.hp}{RESET}"
+            )
         
         if equipe.all_dead() :
             print("Défaite")
