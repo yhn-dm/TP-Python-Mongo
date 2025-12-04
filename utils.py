@@ -48,6 +48,7 @@ def saut():
 
 
 def afficher_personnages(personnages): #depuis le dictionnaire
+    """affiche les personnages disponible dans le menu"""
     separateur()
     print("Personnages disponibles :")
     separateur()
@@ -55,7 +56,7 @@ def afficher_personnages(personnages): #depuis le dictionnaire
     numero = 1
 
     for p in personnages:
-        #format : 1. Nom - ATK: 00 - DEF: 00 - PV: 00
+        """format : 1. Nom - ATK: 00 - DEF: 00 - PV: 00"""
         print(str(numero) + ". " + p["name"] + " - ATK: " + str(p["atk"]) + " - DEF: " + str(p["def"]) + " - PV: " + str(p["hp"]))
         numero = numero + 1
 
@@ -64,21 +65,25 @@ def afficher_personnages(personnages): #depuis le dictionnaire
 
 
 
-def afficher_equipe(equipe): #affiche les 3 personnages choisis
+def afficher_equipe(equipe):
+    """affiche les 3 personnages choisis dans le menu"""
     separateur()
     print("Ton équipe :")
     separateur()
 
     numero = 1
     for c in equipe.characters:
-        #format : 1. Nom - ATK: 00 - DEF: 00 - PV: 00
+        """format : 1. Nom - ATK: 00 - DEF: 00 - PV: 00"""
+        # DEBUG c = character de l'equipe <- creer l'équipe <- model constructeur (probleme update)
         print(str(numero) + ". " + c.name + " - ATK: " + str(c.atk) + " - DEF: " + str(c.defense) + " - PV: " + str(c.hp))
         numero = numero + 1
 
     separateur()
 
 
-def input_secure(message, options_valides): #vérifie que les input sont bien ["1", "2", "3"]
+
+def input_secure(message, options_valides): #
+    """vérifie que les input sont bien ["1", "2", "3"]"""
     choix = input(message)
     choix = choix.strip()
 
@@ -92,24 +97,32 @@ def input_secure(message, options_valides): #vérifie que les input sont bien ["
 
 
 
-def input_nombre(message, min_val, max_val): # choix = input_nombre(message, 1, len(personnages_db))
+def input_nombre(message, min_val, max_val):
+    """vérifie que le choix rentre dans la plage de 1 à x
+    choix = input_nombre(message, 1, len(personnages_db))
+    """
     while True:
         user_input = input(message)
-
+    
         if user_input.isdigit():
             valeur = int(user_input)
-
+    
             if valeur >= min_val and valeur <= max_val:
                 return valeur
 
         print("Entrée invalide, réessaie.")
 
 
+
 def get_random_monster():
+    """draw un monstre random parmis la bdd"""
     monsters = list(db["monsters"].find())
     return random.choice(monsters)
 
+
+
 def save_score(nom_joueur, vague):
+    """enregistre le score dans la bdd classement"""
     classement = db["classement"]
 
     doc = {
@@ -120,7 +133,10 @@ def save_score(nom_joueur, vague):
     print(f"Score sauvegardé : {nom_joueur} - vague {vague}")
     saut()
 
+
+
 def afficher_classement():
+    """lis la table classement dans la bdd"""
     classement = db["classement"]
 
     separateur()
@@ -134,5 +150,7 @@ def afficher_classement():
         print(f"{rang}. {p['joueur']} - Vague {p['vague']}")
         rang += 1
 
+
+
 def afficher_monstre(monstre):
-    print(str(monstre.name) + " - ATK: " + str(monstre.atk) + " - DEF: " + str(monstre.defn) + " - PV: " + str(monstre.hp))
+    print(str(monstre.name) + " - ATK: " + str(monstre.atk) + " - DEF: " + str(monstre.defense) + " - PV: " + str(monstre.hp))

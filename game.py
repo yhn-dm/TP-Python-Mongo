@@ -60,8 +60,14 @@ def combat(equipe, vague):
     print(f"===== VAGUE {vague} =====")
 
     #récum mob
-    monstre_data = get_random_monster()
-    monstre = Monster(monstre_data["name"], monstre_data["atk"], monstre_data["def"], monstre_data["hp"])
+    monstre_db = get_random_monster()
+    monstre = Monster(monstre_db["name"], 
+                    monstre_db["atk"], 
+                    monstre_db["def"], 
+                    monstre_db["hp"],
+                    monstre_db["rarity"],
+                    level=0,
+                    xp_base=monstre_db["xp_drop"])
     afficher_monstre(monstre)
 
     #while monstre isalive and not equip.alldead
@@ -84,28 +90,37 @@ def combat(equipe, vague):
         
     while monstre.is_alive() and not equipe.all_dead() :
         for perso in equipe.call_alive_characters() :
-            monstre.take_damage(perso.atk - monstre.defn)
+            monstre.take_damage(perso.atk - monstre.defense)
             print(
                 f"{YELLOW}{BOLD}{perso.name}{RESET} a infligé "
-                f"{ITALIC}{monstre.atk- monstre.defn}{RESET} au " #a corriger
+                f"{ITALIC}{perso.atk - monstre.defense}{RESET} au " #a corriger
                 f"{RED}{BOLD}{monstre.name}{RESET}, il lui reste "
                 f"{ITALIC}{monstre.hp}{RESET}"
             )
         
         if not monstre.is_alive() :
+            #récupère valeur d'xp_drop du mob -> envoie amount à get_xp
+
             print("Victoire")
+            xp_gain = monstre.xp_drop(vague)#send également la vague
+            perso.get_xp(xp_gain)
+            print(f"Le monstre drop {xp_gain} d'XP ! {perso.name} reçoit ainsi {xp_gain} XP !")
             saut()
             return True
         
         if monstre.is_alive() :
-            cible = random.choice(equipe.call_alive_characters())
-            cible.take_damage(monstre.atk - cible.defense)
-            print(
-            f"{RED}{BOLD}{monstre.name}{RESET} a infligé "
-            f"{ITALIC}{monstre.atk - cible.defn}{RESET} à " #a corriger
-            f"{YELLOW}{BOLD}{cible.name}{RESET}, il lui reste "
-            f"{ITALIC}{cible.hp}{RESET}"
-            )
+            try: #test momentané à supprimer
+                cible = random.choice(equipe.call_alive_characters())
+                cible.take_damage(monstre.atk - cible.defense)
+                print(
+                f"{RED}{BOLD}{monstre.name}{RESET} a infligé "
+                f"{ITALIC}{monstre.atk - cible.defense}{RESET} à " #a corriger
+                f"{YELLOW}{BOLD}{cible.name}{RESET}, il lui reste "
+                f"{ITALIC}{cible.hp}{RESET}"
+                )
+            except Exception:
+                pass
+            
         
         if equipe.all_dead() :
             print("Défaite")

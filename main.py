@@ -24,6 +24,7 @@ def afficher_menu():
     return choix
 
 
+
 def main():
     while True:
         choix = afficher_menu()
